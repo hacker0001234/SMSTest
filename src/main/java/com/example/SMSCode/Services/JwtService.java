@@ -12,7 +12,7 @@ public class JwtService {
 
     public String generateToken(String phone) {
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + 3600000);
+        Date expiry = new Date(now.getTime() + 5 * 60 * 1000);
 
         return Jwts.builder()
                 .setSubject(phone)

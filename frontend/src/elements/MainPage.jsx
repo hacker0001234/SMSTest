@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import Cookies from 'js-cookie';
 
 
 export default function MainPage() {
@@ -12,8 +11,9 @@ export default function MainPage() {
         setPhone(event.target.value);
     }
     const add = () => {
-        axios.post("http://localhost:8080/auth/request-otp", {phone: phone});
+        axios.post("http://localhost:8080/auth/request-otp", {phone: phone},{withCredentials:true});
     }
+
 
     const codeSet = (event) => {
         setCode(event.target.value);
@@ -22,11 +22,10 @@ export default function MainPage() {
         axios.post("http://localhost:8080/auth/verify-otp", {
             phone: phone,
             code: code
-        }).then(resp => Cookies.set('token', resp.data));
+        },{withCredentials:true}).then(resp => console.log(resp.data));
     }
     const test = () => {
-        axios.get("http://localhost:8080/profile",
-            {headers: {Authorization: `Bearer ${Cookies.get("token")}`}})
+        axios.get("http://localhost:8080/profile",{withCredentials:true})
             .then(res => setResponse(res.data));
     }
     return (
@@ -35,7 +34,7 @@ export default function MainPage() {
             <button onClick={add}>+</button>
             <input type="text" onChange={codeSet} placeholder={"code"}/>
             <button onClick={codeUpdate}>code</button>
-            <button onClick={test}>test</button>
+            <button onClick={test}>profile</button>
             <p>{response}</p>
         </div>
     )

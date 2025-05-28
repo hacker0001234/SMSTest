@@ -3,6 +3,7 @@ package com.example.SMSCode.Configs;
 import com.example.SMSCode.Services.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +19,7 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
@@ -36,7 +38,8 @@ public class SecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/auth/**").permitAll()
+                        .pathMatchers("/auth/verify-otp").permitAll()
+                        .pathMatchers("/auth/request-otp").permitAll()
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(jwtAuthenticationFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
@@ -47,10 +50,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:5173");  // твій фронтенд
+        config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addExposedHeader(HttpHeaders.AUTHORIZATION); // корисно, якщо хочеш бачити в відповіді
+        config.addExposedHeader(HttpHeaders.AUTHORIZATION);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
@@ -59,13 +62,14 @@ public class SecurityConfig {
 
 
     public AuthenticationWebFilter jwtAuthenticationFilter() {
+
         ReactiveAuthenticationManager authManager = Mono::just;
         AuthenticationWebFilter filter = new AuthenticationWebFilter(authManager);
 
         filter.setServerAuthenticationConverter(exchange -> {
-            String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                String token = authHeader.substring(7);
+            HttpCookie cookie = exchange.getRequest().getCookies().getFirst("jwt");
+            if (cookie != null) {
+                String token = cookie.getValue();
                 try {
                     String phone = jwtService.extractPhone(token);
                     Authentication auth = new UsernamePasswordAuthenticationToken(phone, null, List.of());
