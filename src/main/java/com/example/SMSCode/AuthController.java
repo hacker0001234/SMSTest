@@ -23,6 +23,7 @@ import java.time.Duration;
 public class AuthController {
     private final OtpService otpService;
     private final JwtService jwtService;
+
     @PostMapping("/request-otp")
     public Mono<ResponseEntity<String>> requestOtp(@RequestBody PhoneRequest request) {
         return otpService.sendOtp(request.phone())
@@ -31,7 +32,6 @@ public class AuthController {
 
     @PostMapping("/verify-otp")
     public Mono<ResponseEntity<String>> verifyOtp(@RequestBody OtpVerificationRequest request) {
-
         return otpService.verifyOtp(request.phone(), request.code())
                 .map(valid -> {
                     if (!valid) {
@@ -46,7 +46,6 @@ public class AuthController {
                             .sameSite("Lax")
                             .maxAge(Duration.ofMinutes(5))
                             .build();
-                    System.out.println(cookie);
 
                     return ResponseEntity.ok()
                             .header(HttpHeaders.SET_COOKIE, cookie.toString())

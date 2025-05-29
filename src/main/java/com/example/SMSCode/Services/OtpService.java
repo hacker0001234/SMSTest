@@ -1,5 +1,8 @@
 package com.example.SMSCode.Services;
 
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -13,7 +16,7 @@ public class OtpService {
     public Mono<Boolean> sendOtp(String phone) {
         String code = generateOtp();
         otpStore.put(phone, code);
-        System.out.println("OTP для " + phone + ": " + code);
+        System.out.println(code + " a code for " + phone);
         return Mono.just(true);
     }
 
@@ -22,6 +25,6 @@ public class OtpService {
     }
 
     private String generateOtp() {
-        return String.valueOf((int)(Math.random() * 900000) + 100000);
+        return String.valueOf((int) (Math.random() * 900000) + 100000);
     }
 }

@@ -60,7 +60,6 @@ public class SecurityConfig {
         return source;
     }
 
-
     public AuthenticationWebFilter jwtAuthenticationFilter() {
 
         ReactiveAuthenticationManager authManager = Mono::just;
