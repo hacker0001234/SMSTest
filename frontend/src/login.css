@@ -6,6 +6,11 @@
     top: 7px;
     left: 2px;
 }
+.login{
+    position: relative;
+    top : 60px;
+    right: 240px;
+}
 
 .btn {
     position: relative;

@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 
-export default function CodeChecking(){
+export default function LoginPageCode(){
     const {phone} = useParams();
     const [open, setOpen] = useState(true);
     const [openError, setOpenError] = useState(false);
@@ -30,21 +30,21 @@ export default function CodeChecking(){
         setCode(event.target.value.toString());
     }
     useEffect(() => {
-            if (code.length === 6){
+        if (code.length === 6){
             setIsCorrect(true);
-            }else{
-                setIsCorrect(false);
-            }
-        }, [code]);
+        }else{
+            setIsCorrect(false);
+        }
+    }, [code]);
 
     const sendCode = (event) =>{
-        axios.post("http://localhost:8080/auth/verify-otp",{phone: phone, code: code}, {withCredentials:true})
+        axios.post("http://localhost:8080/auth/verify-otp/login",{phone: phone, code: code}, {withCredentials:true})
             .then(resp =>{
-               window.location.href="/profile"
+                window.location.href="/profile"
             })
             .catch(err =>{
                 setOpenError(true)
-            errorCode()});
+                errorCode()});
     }
     return(
         <div className={"codeDiv"}>

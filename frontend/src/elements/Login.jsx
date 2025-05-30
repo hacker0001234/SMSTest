@@ -5,7 +5,7 @@ import '../login.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLock, faPaperPlane} from "@fortawesome/free-solid-svg-icons";
 
-export default function MainPage() {
+export default function LoginPage() {
     const [phone, setPhone] = useState("");
     const [country, setCountry] = useState(null);
     const [isCorrectPhoneNumber, setIsCorrectPhoneNumber] = useState(false);
@@ -34,7 +34,7 @@ export default function MainPage() {
     const add = () => {
         if (isCorrectPhoneNumber) {
             axios.post("http://localhost:8080/auth/request-otp", {phone: phoneNumber}, {withCredentials: true})
-                .then(resp => window.location.href = `/profile/${phoneNumber}`);
+                .then(resp => window.location.href = `/login/${phoneNumber}`);
         }
     }
     return (
@@ -103,7 +103,7 @@ export default function MainPage() {
                 <span className="btn-text-two">{isCorrectPhoneNumber ? <>SEND <FontAwesomeIcon
                     icon={faPaperPlane}/></> : <FontAwesomeIcon icon={faLock} size={"2x"}/>}</span>
             </button>
-            <Button variant="text" className={"login"} href={"/login"}>LOGIN</Button>
+            <Button variant="text" className={"login"} href={"/"}>REG</Button>
         </div>
     )
 }

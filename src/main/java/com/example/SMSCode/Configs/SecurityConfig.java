@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .pathMatchers("/auth/verify-otp").permitAll()
                         .pathMatchers("/auth/request-otp").permitAll()
                         .pathMatchers("/profile/check").permitAll()
+                        .pathMatchers("/auth/verify-otp/login").permitAll()
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(jwtAuthenticationFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
