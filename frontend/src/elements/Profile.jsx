@@ -1,8 +1,13 @@
-import {useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 export default function Profile(){
-    const {phone} = useParams();
+    const [profile,setProfile] = useState("");
+    useEffect(() => {
+        axios.get("http://localhost:8080/profile",{withCredentials:true})
+            .then(res => setProfile(res.data));
+    }, []);
     return(
-        <p>{phone}</p>
+        <p>{profile}</p>
     )
 }

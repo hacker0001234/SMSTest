@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/auth/verify-otp").permitAll()
                         .pathMatchers("/auth/request-otp").permitAll()
+                        .pathMatchers("/profile/check").permitAll()
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(jwtAuthenticationFilter(), SecurityWebFiltersOrder.AUTHENTICATION)

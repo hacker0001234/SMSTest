@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {Autocomplete, Box, TextField} from "@mui/material";
 import '../login.css'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faLock, faPaperPlane} from "@fortawesome/free-solid-svg-icons";
 
 export default function MainPage() {
     const [phone, setPhone] = useState("");
@@ -98,7 +100,8 @@ export default function MainPage() {
                        className={"phone"} type={"text"} onChange={changePhone}/>
             <button className="btn" onClick={add}>
                 <span className="btn-text-one">{isCorrectPhoneNumber ? phoneNumber : "bad number"}</span>
-                <span className="btn-text-two">SEND</span>
+                <span className="btn-text-two">{isCorrectPhoneNumber ? <>SEND <FontAwesomeIcon
+                    icon={faPaperPlane}/></> : <FontAwesomeIcon icon={faLock} size={"2x"}/>}</span>
             </button>
         </div>
     )

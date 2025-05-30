@@ -23,4 +23,8 @@ public class ProfileController {
 
         return authMono.map(auth -> "Hello, " + auth.getName());
     }
+    @GetMapping("/check")
+    public Mono<Boolean> CheckProfile(Authentication authentication){
+        return Mono.just(authentication != null &&  authentication.isAuthenticated());
+    }
 }
